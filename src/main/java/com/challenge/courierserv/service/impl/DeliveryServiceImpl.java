@@ -55,8 +55,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 .map(DeliveryEntry::getValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
 
-
-
+        log.info("Statement generated successfully for courier: " +  courierID );
         return statementVO;
 
     }

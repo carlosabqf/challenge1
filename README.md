@@ -22,18 +22,41 @@ This project contains the initial version for handling delivery events using an 
 - Access http://localhost:15672/
 - Go to the Queues tab
 - Locate the queue named "delivery_queue" and post a message
-  - Example message:
+  - Example message (Sync Delivery Created):
       ```
         {
             "eventId":"abc",
             "deliveryId":"abc",
             "value":10.5,
             "eventType":"CREATE_DELIVERY",
-            "eventTimestamp":"2023-12-29T21:40:20.000"
+            "eventTimestamp":"2023-12-29T21:40:20.000",
+            "courierId":8
         }
-    ``` 
+    ```
+  - Example message (Sync Delivery Adjustment):
+    ```
+    {
+      "eventId":"abc",
+      "deliveryId":"02b421c4-18df-4036-9984-5a916b768e13",
+      "value":-1.5,
+      "eventType":"ADJUST_DELIVERY",
+      "eventTimestamp":"2023-12-29T21:40:20.000",
+      "courierId":8
+      }
+      ``` 
+      - Example message (Sync Delivery Bonus):
+    ```
+    {
+      "eventId":"abc",
+      "deliveryId":"02b421c4-18df-4036-9984-5a916b768e13",
+      "value":1.5,
+      "eventType":"ADD_BONUS_DELIVERY",
+      "eventTimestamp":"2023-12-29T21:40:20.000",
+      "courierId":8
+      }
+      ``` 
 
-    ![overview-image](./docs/overview-architecture.png "Proposed Architecture")
+      ![overview-image](./docs/overview-architecture.png "Proposed Architecture")
 
 
 ### How to query for a courier statement:
