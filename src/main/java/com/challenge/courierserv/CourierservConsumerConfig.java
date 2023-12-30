@@ -6,6 +6,9 @@ import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.rabbit.config.RetryInterceptorBuilder;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.retry.MessageRecoverer;
+import org.springframework.amqp.rabbit.retry.RepublishMessageRecoverer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +20,20 @@ import org.springframework.retry.interceptor.RetryOperationsInterceptor;
 public class CourierservConsumerConfig {
 
     @Bean
-    public RetryOperationsInterceptor retryInterceptor() {
+    public MessageRecoverer recovererToDeadLetterQueue(RabbitTemplate template){
+        return new RepublishMessageRecoverer(template,"dlx");
+    }
+
+    @Bean
+    public RetryOperationsInterceptor retryInterceptor(MessageRecoverer recoverer) {
         return RetryInterceptorBuilder.stateless()
                 .backOffOptions(1000, 3.0, 10000)
                 .maxAttempts(5)
+                //.recoverer((message, throwable) -> {log.error("Retries exhausted: " + new String(message.getBody()));})
+                .recoverer(recoverer)
                 .build();
+
+
     }
 
 
