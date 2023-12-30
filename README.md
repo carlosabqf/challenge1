@@ -14,6 +14,10 @@ This project contains the initial version for handling delivery events using an 
  - Start the CourierservApplication.java using your preferred IDE
  - The application will run its dependencies in containers (Postgres, RabbitMQ)
 
+###  Overview Video (Click on the image to follow the Youtube link)
+[![Video overview](https://img.youtube.com/vi/4iK3V4DLjPA/0.jpg)](https://www.youtube.com/watch?v=4iK3V4DLjPA)
+
+
 
 ###  How to post an event:
 ~~Use the api to post a delivery or patch with an change~~(To-be)
