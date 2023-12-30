@@ -3,10 +3,9 @@
 ##
 This project contains the initial version for handling delivery events using an architecture based in the CQRS Pattern. 
 
-    There are two components in this repository:
+     There are two components in this repository:
         - A service implementing a REST API to query the statements for courier
         - A Consumer which listen to Delivery-type events and keep the read-only database sync with the write-db.  
-    
 
 ### Pre-requisites:
 - Docker installed and logged to allow download images
@@ -34,7 +33,7 @@ This project contains the initial version for handling delivery events using an 
         }
     ``` 
 
-    ![overview-image](/Users/Carlos/repositorios/SKIP/courierserv/docs/overview-architecture.png "Proposed Architecture")
+    ![overview-image](./docs/overview-architecture.png "Proposed Architecture")
 
 
 ### How to query for a courier statement:
