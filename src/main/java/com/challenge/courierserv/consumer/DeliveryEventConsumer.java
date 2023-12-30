@@ -16,9 +16,10 @@ public class DeliveryEventConsumer {
         return new Jackson2JsonMessageConverter();
     }
 
+
     @RabbitListener(queues = "${delivery.queue.name}")
     public void consumeDeliveryEventFromQueue(DeliveryEvent event){
-        log.info(">>>>>>>>>Event:" + event.getMessage());
+        log.info(">>>>>>>>>Event:" + event.getValue());
     }
 
 }
