@@ -1,10 +1,11 @@
 package stepDefinitions;
 
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 import org.junit.Assert;
+import io.cucumber.java.en.When;
+import io.restassured.response.Response;
 import support.requests.CourierRequests;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,13 +30,18 @@ public class DeliverySteps {
      * @param courierId the Courier id
      */
     @When("I send a post call to courier with id {string}")
-    public void performPostCourier(final String courierId) {
+    public void performGetCourierStatement(final String courierId) {
         this.response = new CourierRequests().postCourier(courierId);
     }
 
     @When("I get statements to courier with id {string}, start date {string} and end date {string}")
-    public void performPostCourier(final String courierId, final String startDate, final String endDate) {
+    public void performGetCourierStatement(final String courierId, final String startDate, final String endDate) {
         this.response = new CourierRequests().getCourierStatement(courierId, startDate, endDate);
+    }
+
+    @When("I send a post call to statements to courier with id {string}, start date {string} and end date {string}")
+    public void performPostCourierStatement(final String courierId, final String startDate, final String endDate) {
+        this.response = new CourierRequests().postCourierStatement(courierId, startDate, endDate);
     }
 
     /**
@@ -58,6 +64,30 @@ public class DeliverySteps {
         JsonPath responseJson = this.response.jsonPath();
         final String responseMessage = responseJson.get("error");
         Assert.assertTrue(responseMessage.contains(message));
+    }
+
+    /**
+     * Check if response contains a specific value to totalDeliveries
+     *
+     * @param value value expected
+     */
+    @And("I validate that the response contains the totalDeliveries: {int}")
+    public void isResponseMessage(final int value) {
+        JsonPath responseJson = this.response.jsonPath();
+        final int responseValue = responseJson.get("totalDeliveries");
+        Assert.assertSame(value, responseValue);
+    }
+
+    /**
+     * Check if response contains a specific value to totalEarnings
+     *
+     * @param value value expected
+     */
+    @And("I validate that the response contains the totalEarnings: {float}")
+    public void isResponseMessage(final float value) {
+        JsonPath responseJson = this.response.jsonPath();
+        final Float responseValue = responseJson.get("totalEarnings");
+        Assert.assertTrue(value==responseValue);
     }
 }
 
