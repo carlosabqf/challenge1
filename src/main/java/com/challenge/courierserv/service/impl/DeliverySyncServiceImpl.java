@@ -1,5 +1,6 @@
 package com.challenge.courierserv.service.impl;
 
+import com.challenge.courierserv.exceptions.UnprocessableMessageException;
 import com.challenge.courierserv.models.DeliveryEntry;
 import com.challenge.courierserv.models.events.DeliveryEvent;
 import com.challenge.courierserv.models.events.EventTypeEnum;
@@ -29,23 +30,29 @@ public class DeliverySyncServiceImpl implements DeliverySyncService {
     public void syncCreateDelivery(DeliveryEvent event) {
 
         //TODO Create enum for state representation - 1 Create, 2 Adjustment, 3 Bonus
+        if(deliveryRepository.findById(event.getDeliveryId()).isEmpty()){
+            if(EventTypeEnum.CREATE_DELIVERY.equals(event.getEventType())){
 
-        if (EventTypeEnum.CREATE_DELIVERY.equals(event.getEventType())) {
-            DeliveryEntry newEntry = DeliveryEntry.builder()
-                    .state(1)
-                    .createdTimestamp(ObjectUtils.defaultIfNull(event.getEventTimestamp(), LocalDateTime.now()))
-                    .value(event.getValue())
-                    .courierId(event.getCourierId())
-                    .deliveryId(event.getDeliveryId())
-                    .build();
-            deliveryRepository.save(newEntry);
-            log.info("Delivery created successfully. Updated Delivery:" + event.getDeliveryId());
+                DeliveryEntry newEntry = DeliveryEntry.builder()
+                        .state(1)
+                        .createdTimestamp(ObjectUtils.defaultIfNull(event.getEventTimestamp(), LocalDateTime.now()))
+                        .value(event.getValue())
+                        .courierId(event.getCourierId())
+                        .deliveryId(event.getDeliveryId())
+                        .build();
+                deliveryRepository.save(newEntry);
+                log.info("Delivery created successfully. Delivery:" + event.getDeliveryId());
+            }
+        }else {
+            log.error( String.format("Received an event trying to create a delivery that already exists. " +
+                            "Event: %s , Delivery: %s .",event.getEventId(), event.getDeliveryId()));
         }
+
     }
 
     @Transactional
     @Override
-    public void syncUpdateDelivery(DeliveryEvent event) {
+    public void syncUpdateDelivery(DeliveryEvent event) throws UnprocessableMessageException {
 
         if(EventTypeEnum.ADJUST_DELIVERY.equals(event.getEventType()) ||
                 EventTypeEnum.ADD_BONUS_DELIVERY.equals(event.getEventType())){
@@ -57,7 +64,7 @@ public class DeliverySyncServiceImpl implements DeliverySyncService {
                 //TODO create custom exception
                 //Rollback the transaction and will be able to consume message later.
                 // It may happen when receive the update event before the create
-                throw new RuntimeException("It is not possible to update the delivery.");
+                throw new UnprocessableMessageException(event.getDeliveryId());
             }
         }
     }

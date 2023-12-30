@@ -23,7 +23,7 @@ This project contains the initial version for handling delivery events using an 
 ~~Use the api to post a delivery or patch with an change~~(To-be)
 
 (As-is - while in development)
-- Access http://localhost:15672/
+- Access http://localhost:15672/ (user:guest / password: guest)
 - Go to the Queues tab
 - Locate the queue named "delivery_queue" and post a message
   - Example message (Sync Delivery Created):

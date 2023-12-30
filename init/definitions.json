@@ -6,8 +6,16 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {
-        "x-queue-type": "classic"
+        "x-queue-type": "classic",
+        "x-dead-letter-exchange": "dlx"
       }
+    },
+    {
+      "arguments": {},
+      "auto_delete": false,
+      "durable": true,
+      "name": "dead",
+      "vhost": "/"
     }
   ],
   "exchanges": [
@@ -19,6 +27,15 @@
       "auto_delete": false,
       "internal": false,
       "arguments": {}
+    },
+    {
+      "arguments": {},
+      "auto_delete": false,
+      "durable": true,
+      "internal": false,
+      "name": "dlx",
+      "type": "fanout",
+      "vhost": "/"
     }
   ],
   "bindings": [
@@ -28,6 +45,14 @@
       "destination": "delivery_queue",
       "destination_type": "queue",
       "routing_key": "delivery_queue",
+      "arguments": {}
+    },
+    {
+      "source": "dlx",
+      "vhost": "/",
+      "destination": "dead",
+      "destination_type": "queue",
+      "routing_key": "",
       "arguments": {}
     }
   ],
