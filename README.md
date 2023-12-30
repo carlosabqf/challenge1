@@ -43,8 +43,6 @@ This project contains the initial version for handling delivery events using an 
 
  - or, use the URL like the example -> http://localhost:8081/v1/delivery/courier/8/statement?startDate=2023-12-20&endDate=2023-12-30
  - or, using curl (can be used also in tools like Postman or Insomnia):
- - ````shell
-   curl -X 'GET' 'http://localhost:8081/v1/delivery/courier/8/statement?startDate=2023-12-20&endDate=2023-12-30'
-````
-
-
+    ```shell
+   curl -X 'GET' 'http://localhost:8081/v1/delivery/courier/8/statement?startDate=2023-12-20&endDate=2023-12-30' 
+   ```
