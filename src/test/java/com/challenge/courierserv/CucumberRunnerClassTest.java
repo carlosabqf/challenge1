@@ -1,3 +1,5 @@
+package com.challenge.courierserv;
+
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 import org.junit.runner.RunWith;
@@ -9,5 +11,5 @@ import org.junit.runner.RunWith;
                 "html:target/home-page-html"},
         glue = {"support", "stepDefinitions"},
         publish = true)
-public class TestRunnerClass {
+public class CucumberRunnerClassTest {
 }
